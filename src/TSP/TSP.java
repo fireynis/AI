@@ -12,7 +12,7 @@ import java.util.*;
 
 public class TSP {
 
-    public static void GA(long seed, int popSize, int k, int maxGen, String crossOver, double crossOverRate, double mutationRate, int runs) throws Exception {
+    public static void GA(long seed, int popSize, int k, int maxGen, String crossOver, double crossOverRate, double mutationRate, int runs, String path) throws Exception {
         Random generator = new Random(seed);
         ArrayList<Chromosome> chromosomeArray = new ArrayList<>();
         ArrayList<City> cities = new ArrayList<>();
@@ -42,7 +42,7 @@ public class TSP {
 
         ReadCities input = new ReadCities();
         try {
-            cities = input.readFile("");
+            cities = input.readFile(path);
         } catch (IOException e1) {
             e1.printStackTrace();
             System.exit(1);
