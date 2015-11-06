@@ -72,8 +72,8 @@ public class Crossover {
 
             // It includes 0 and excludes the bound thus the +1
             if (generator.nextInt(10)+1 > rate) {
-                int random1 = generator.nextInt(chromosomeArrayList.size()-1);
-                int random2 = generator.nextInt(chromosomeArrayList.size()-1);
+                int random1 = generator.nextInt(p1.size-1);
+                int random2 = generator.nextInt(p1.size-1);
 
                int start = Math.min(random1, random2);
                int end = Math.max(random1, random2);
@@ -92,14 +92,23 @@ public class Crossover {
                     }
                 }
 
-                for (int j = 0; j < p1.size; j++) {
-                    if (!c1.exists(p2.get(j))) {
-                        c1.add(j, p2.get(j));;
+                for (int i = 0; i < c1.size; i++) {
+                    int index = 0;
+                    if (c1.get(i) == null) {
+                        while (c1.exists(p2.get(index))) {
+                            index++;
+                        }
+                        c1.add(i, p2.get(index));
                     }
-                    if (!c2.exists(p1.get(j))) {
-                        c2.add(j, p1.get(j));;
+                    index = 0;
+                    if (c2.get(i) == null) {
+                        while (c2.exists(p1.get(index))) {
+                            index++;
+                        }
+                        c2.add(i, p1.get(index));
                     }
                 }
+
 
                 c1.calculateFitness();
                 c2.calculateFitness();

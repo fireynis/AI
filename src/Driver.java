@@ -4,7 +4,7 @@ public class Driver {
 
     public Driver() {
         long t1 = System.nanoTime();
-        System.out.printf("Running all the variations. Takes approximately 20 seconds");
+        System.out.println("Running all the variations. Takes approximately 20 seconds");
         try {
             TSP.GA(System.nanoTime(), 150, 5, 150, "uniform", 1.0, 0.0, 5);
             TSP.GA(System.nanoTime(), 150, 5, 150, "uniform", 1.0, 0.1, 5);

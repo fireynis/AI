@@ -21,6 +21,7 @@ public class TSP {
         double averageFitnessGeneration = 0.0;
         double totalAverageBestFitness = 0.0;
         double totalAverageFitness = 0.0;
+        Chromosome absoluteBestChromosome = null;
         Chromosome bestChromosome;
         PrintWriter printer = null;
 
@@ -46,6 +47,8 @@ public class TSP {
             e1.printStackTrace();
             System.exit(1);
         }
+
+        absoluteBestChromosome = new Chromosome(cities);
 
         for (int l = 0; l < runs; l++) {
             chromosomeArray.clear();
@@ -86,9 +89,13 @@ public class TSP {
                     if (chromosome.fitness < bestFitnessGeneration) {
                         bestFitnessGeneration = chromosome.fitness;
                     }
+                    if (chromosome.fitness < absoluteBestChromosome.fitness) {
+                        absoluteBestChromosome = chromosome;
+                    }
                     averageFitnessGeneration += chromosome.fitness;
                 }
-                chromosomeArray.set(chromosomeArray.size()-1, bestChromosome);
+                //I have removed this because it ended up really increasing fitness.
+//                chromosomeArray.set(chromosomeArray.size()-1, bestChromosome);
                 averageFitnessGeneration = averageFitnessGeneration/chromosomeArray.size();
                 printer.println((i+1)+","+bestFitnessGeneration+","+averageFitnessGeneration+","+bestChromosome.fitness);
             }
@@ -99,13 +106,17 @@ public class TSP {
 
             totalAverageBestFitness += bestFitnessGeneration;
             totalAverageFitness += averageFitnessGeneration;
+
+            //I got an email the day before it was due saying this needs to change per run
+            //so I had to shoe horn it in.
+            generator = new Random(System.nanoTime());
         }
 
         totalAverageBestFitness = totalAverageBestFitness/(runs);
         totalAverageFitness = totalAverageFitness/(runs);
 
-        printer.println("Total Average Best Fitness,Total Average Fitness");
-        printer.println(totalAverageBestFitness+","+totalAverageFitness);
+        printer.println("Total Average Best Fitness,Total Average Fitness,Best Fitness Run,Best Chromosome");
+        printer.println(totalAverageBestFitness+","+totalAverageFitness+","+absoluteBestChromosome.fitness+","+absoluteBestChromosome.print());
         printer.close();
     }
 }
