@@ -14,8 +14,8 @@ public class Mutation {
 
         for (Chromosome chromosome : chromosomeArrayList) {
             if (generator.nextInt(10)+1 > rate) {
-                int random1 = generator.nextInt(chromosome.size);
-                int random2 = generator.nextInt(chromosome.size);
+                int random1 = generator.nextInt(chromosome.size-1);
+                int random2 = generator.nextInt(chromosome.size-1);
                 temp = chromosome.get(random1);
                 chromosome.add(random1, chromosome.get(random2));
                 chromosome.add(random2, temp);

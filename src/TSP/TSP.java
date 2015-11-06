@@ -12,7 +12,7 @@ import java.util.*;
 
 public class TSP {
 
-    public TSP(long seed, int popSize, int k, int maxGen, String crossOver, double crossOverRate, double mutationRate, int runs) {
+    public static void GA(long seed, int popSize, int k, int maxGen, String crossOver, double crossOverRate, double mutationRate, int runs) throws Exception {
         Random generator = new Random(seed);
         ArrayList<Chromosome> chromosomeArray = new ArrayList<>();
         ArrayList<City> cities = new ArrayList<>();
@@ -23,6 +23,10 @@ public class TSP {
         double totalAverageFitness = 0.0;
         Chromosome bestChromosome;
         PrintWriter printer = null;
+
+        if (popSize % 2 > 0) {
+            popSize += 1;
+        }
 
         try {
             printer = new PrintWriter(crossOver+"-"+crossOverRate+"-"+mutationRate+"-"+System.nanoTime()+".csv", "UTF-8");
@@ -52,7 +56,7 @@ public class TSP {
                 chromosomeArray.add(new Chromosome(temp));
             }
 
-            printer.println("Generation,Best Fitness,Average Fitness");
+            printer.println("Generation,Average Best Fitness Generation,Average Fitness,Best Fitness");
 
             bestChromosome = chromosomeArray.get(0);
 
@@ -62,7 +66,16 @@ public class TSP {
                 //Do the tournament selection
                 chromosomeArray = Tournament.tournament(chromosomeArray, k, generator);
                 //Do the crossover
-                chromosomeArray = Crossover.uniformCrossover(chromosomeArray, crossOverRate, generator);
+                switch (crossOver){
+                    case "uniform":
+                        chromosomeArray = Crossover.uniformCrossover(chromosomeArray, crossOverRate, generator);
+                        break;
+                    case "pmx":
+                        chromosomeArray = Crossover.partiallyMappedCrossover(chromosomeArray, crossOverRate, generator);
+                        break;
+                    default:
+                        throw new Exception("Entered an invalid crossover.");
+                }
                 //Do the mutation
                 chromosomeArray = Mutation.mutate(chromosomeArray, mutationRate, generator);
 
@@ -75,8 +88,9 @@ public class TSP {
                     }
                     averageFitnessGeneration += chromosome.fitness;
                 }
+                chromosomeArray.set(chromosomeArray.size()-1, bestChromosome);
                 averageFitnessGeneration = averageFitnessGeneration/chromosomeArray.size();
-                printer.println((i+1)+","+bestFitnessGeneration+","+averageFitnessGeneration);
+                printer.println((i+1)+","+bestFitnessGeneration+","+averageFitnessGeneration+","+bestChromosome.fitness);
             }
             printer.println();
             printer.println("Run Best Fitness,Chromosome");
